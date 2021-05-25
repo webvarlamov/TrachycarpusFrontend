@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+main {
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+main aside {
+  grid-column: 1;
+  background-color: var(--sapList_Background);
+}
+
+main section {
+  grid-column: 2;
+}

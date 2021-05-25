@@ -1,0 +1,16 @@
+<ul class="fd-list fd-list--compact fd-list--byline" role="list">
+  <ng-container *ngFor="let device  of deviceList$ | async">
+    <li class="fd-list__item" (click)="selectDevice(device)">
+    <span class="fd-image--s fd-list__thumbnail">
+      <span class="sap-icon sap-icon--ui-notifications" style="font-size:2rem"></span>
+    </span>
+      <div class="fd-list__content">
+        <div class="fd-list__title">{{device.uuid}}</div>
+        <div class="fd-list__byline fd-list__byline--2-col">
+          <div class="fd-list__byline-left">{{device.userAgent}}</div>
+          <div class="fd-list__byline-right">{{device.active}}</div>
+        </div>
+      </div>
+    </li>
+  </ng-container>
+</ul>
