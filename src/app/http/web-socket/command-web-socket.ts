@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WebSocketObservable } from "./web-socket-observable";
+import {HttpDataAccessService} from "../http-data-access.service";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { WebSocketObservable } from "./web-socket-observable";
 export class CommandWebSocket extends WebSocketObservable {
 
   constructor() {
-    super("command-socket")
+    super('command-socket')
   }
 
   public sendCommand(data: string, destination: WebSocketSessionIdOrServer, commandType: CommandType): void {

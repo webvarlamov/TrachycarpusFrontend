@@ -15,6 +15,6 @@ export class HttpUtils {
   }
 
   public static isDev(): boolean {
-    return location.port === "4200"
+    return location.port === "4200" || location.port === "4201"
   }
 }

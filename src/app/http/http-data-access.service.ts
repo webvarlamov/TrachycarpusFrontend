@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 })
 export class HttpDataAccessService {
   private root = '/api'
+  private handshakePath = '/handshake'
 
   constructor(
     private httpClient: HttpClient
@@ -14,6 +15,10 @@ export class HttpDataAccessService {
 
   public loadEntities<T>(domainType: string, options?: any): Observable<Pageable<T>> {
     return this.httpClient.get(`${this.root}/${domainType}`) as Observable<Pageable<T>>
+  }
+
+  public handshake(): Observable<boolean> {
+    return this.httpClient.get(this.handshakePath) as Observable<boolean>
   }
 }
 
