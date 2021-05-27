@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { WebSocketObservable } from "./web-socket-observable";
-import {HttpDataAccessService} from "../http-data-access.service";
 
 @Injectable({
   providedIn: 'root'

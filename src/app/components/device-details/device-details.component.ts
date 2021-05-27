@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Store} from "@ngrx/store";
-import {selectSelectedDevice} from "../../store/device-list/reducer/device-list.reducer";
-import {AppStore} from "../../store/app-store";
+import { Store } from "@ngrx/store";
+import { selectSelectedDevice } from "../../store/device-list/reducer/device-list.reducer";
+import { AppStore } from "../../store/app-store";
 
 @Component({
   selector: 'app-device-details',

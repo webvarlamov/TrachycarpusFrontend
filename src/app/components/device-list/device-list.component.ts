@@ -24,7 +24,6 @@ export class DeviceListComponent implements OnInit {
   ngOnInit(): void {}
 
   public selectDevice(userDevice: UserDevice) {
-    console.log(userDevice)
     this.store.dispatch(setSelectedUserDevice({ userDevice }))
   }
 }
