@@ -9,7 +9,7 @@ export class WebSocketObservable {
 
   public readonly onclose$: Subject<any> = new Subject<any>();
   public readonly onerror$: Subject<any> = new Subject<any>();
-  public readonly onmessage$: Subject<any> = new Subject<any>();
+  public readonly onmessage$: Subject<MessageEvent> = new Subject<MessageEvent>();
   public readonly onopen$: Subject<any> = new Subject<any>();
 
   readonly onclose = (event: CloseEvent) => { this.onclose$.next(event) };
