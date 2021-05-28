@@ -9,9 +9,32 @@ main {
   grid-template-columns: auto 1fr;
 }
 
+@media screen and (max-width: 980px) {
+  main aside {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 980px) {
+  main aside {
+    border-right: var(--sapList_BorderWidth,.0625rem) solid var(--sapList_BorderColor,#e4e4e4);
+    overflow-y: hidden;
+  }
+}
+
 main aside {
   grid-column: 1;
   background-color: var(--sapList_Background);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+main aside app-device-list {
+  flex-grow: 1;
+  overflow: auto;
 }
 
 main section {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4201",
+    "start": "ng serve --port 4201 --host 172.20.10.4",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,13 +18,14 @@
     "@angular/platform-browser": "~12.0.1",
     "@angular/platform-browser-dynamic": "~12.0.1",
     "@angular/router": "~12.0.1",
-    "fundamental-styles": "^0.18.0",
     "@ngrx/effects": "10.1.1",
     "@ngrx/router-store": "10.1.1",
     "@ngrx/store": "10.1.1",
     "@ngrx/store-devtools": "10.1.1",
+    "fundamental-styles": "^0.18.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
+    "useragent-parser-js": "^1.0.3",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "@angular/compiler-cli": "~12.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
+    "@types/ua-parser-js": "^0.7.36",
     "jasmine-core": "~3.7.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

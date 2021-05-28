@@ -5,6 +5,7 @@ export interface UserDeviceModel {
   userAgent: string;
   active: string;
   holder: string;
+  online: boolean;
 }
 
 export class UserDevice implements UserDeviceModel {
@@ -14,6 +15,7 @@ export class UserDevice implements UserDeviceModel {
   public name: string;
   public userAgent: string;
   public uuid: string;
+  online: boolean;
 
   constructor(params: UserDeviceModel) {
     this.id = params?.id
@@ -22,5 +24,6 @@ export class UserDevice implements UserDeviceModel {
     this.name = params?.name;
     this.userAgent = params?.userAgent;
     this.uuid = params?.uuid;
+    this.online = params.online;
   }
 }

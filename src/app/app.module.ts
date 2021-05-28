@@ -8,12 +8,16 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import {AppStoreModule} from "./store/app-store.module";
 import {CommonModule} from "@angular/common";
+import { DeviceListHeaderComponent } from './components/device-list/device-list-header/device-list-header.component';
+import { DeviceListFooterComponent } from './components/device-list/device-list-footer/device-list-footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DeviceListComponent,
-    DeviceDetailsComponent
+    DeviceDetailsComponent,
+    DeviceListHeaderComponent,
+    DeviceListFooterComponent
   ],
   imports: [
     BrowserModule,
