@@ -1,3 +1,8 @@
-:host {
-  min-height: 55px;
+/*:host {*/
+/*  min-height: 55px;*/
+/*}*/
+
+div.fd-action-bar {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }

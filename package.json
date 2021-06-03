@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4201 --host 172.20.10.4",
+    "start": "ng serve --port 4201",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -24,6 +24,7 @@
     "@ngrx/store-devtools": "10.1.1",
     "fundamental-styles": "^0.18.0",
     "rxjs": "~6.6.0",
+    "sweetalert2": "^11.0.16",
     "tslib": "^2.1.0",
     "useragent-parser-js": "^1.0.3",
     "zone.js": "~0.11.4"

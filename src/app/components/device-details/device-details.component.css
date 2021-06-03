@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow: auto;
+}
+
+main {
+  height: 100%;
+  justify-content: space-between;
+}
+
+div.fd-page__content {
+  display: flex;
+  height: 100%;
+}
+

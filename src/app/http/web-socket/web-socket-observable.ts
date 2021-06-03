@@ -1,5 +1,6 @@
-import { Subject, Subscription } from "rxjs";
+import {Observable, Subject, Subscription} from "rxjs";
 import { HttpUtils } from "../http.utils";
+import {shareReplay} from "rxjs/operators";
 
 export class WebSocketObservable {
   public webSocket: WebSocket | undefined;
@@ -7,9 +8,13 @@ export class WebSocketObservable {
 
   public subscriptions: Array<Subscription> = new Array<Subscription>();
 
+  public readonly onmessageSubject: Subject<MessageEvent> = new Subject<MessageEvent>();
+
   public readonly onclose$: Subject<any> = new Subject<any>();
   public readonly onerror$: Subject<any> = new Subject<any>();
-  public readonly onmessage$: Subject<MessageEvent> = new Subject<MessageEvent>();
+  public readonly onmessage$: Observable<MessageEvent> = this.onmessageSubject.pipe(
+    shareReplay({refCount: true, bufferSize: 1})
+  )
   public readonly onopen$: Subject<any> = new Subject<any>();
 
   readonly onclose = (event: CloseEvent) => {
@@ -24,7 +29,7 @@ export class WebSocketObservable {
 
   readonly onmessage = (event: MessageEvent) => {
     console.log("On WebSocket message", event)
-    this.onmessage$.next(event)
+    this.onmessageSubject.next(event)
   };
   readonly onopen = (event: Event) => {
     console.log("On WebSocket open", event)
@@ -36,7 +41,7 @@ export class WebSocketObservable {
         HttpUtils.isHttps() ? "wss://" : "ws://")
       + HttpUtils.getHostName()
       + (HttpUtils.isDev() ? ":8081" : "")
-      + "/" + this.path)
+      + "/" + this.path + this.withQueryParams())
 
     this.webSocket.onclose = this.onclose;
     this.webSocket.onerror = this.onerror;
@@ -44,12 +49,16 @@ export class WebSocketObservable {
     this.webSocket.onopen = this.onopen;
   }
 
-  send(message: string) {
+  public send(message: string) {
     if (this.webSocket !== undefined) {
       this.webSocket?.send(message);
     } else {
       console.error(`WebSocket: ${this.path} is undefined!`)
     }
+  }
+
+  public withQueryParams(): string {
+    return ""
   }
 
   constructor(path: string) {

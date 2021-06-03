@@ -10,21 +10,29 @@ export class CommandWebSocket extends WebSocketObservable {
     super('command-socket')
   }
 
-  public sendCommand(data: string, destination: WebSocketSessionIdOrServer, commandType: CommandType): void {
-    super.send(JSON.stringify({
-      data,
-      destination,
-      commandType
-    }));
+  public sendCommand(commandSocketMessage: CommandSocketMessage): void {
+    super.send(JSON.stringify(commandSocketMessage));
+  }
+
+  public withQueryParams(): string {
+    return "?" + "user-device-id=" + localStorage.getItem("user-device-id")
   }
 }
 
-export enum CommandType {
-  OfferFromRemote = "offer-from-remote",
-  AnswerFromRemote = "answer-from-remote",
-  CandidateFromRemote = "candidate-from-remote"
+export enum CommandWebSocketMessageType {
+  set_offer_from_remote = "set_offer_from_remote",
+  set_answer_from_remote = "set_answer_from_remote",
+  set_candidate_from_remote = "set_candidate_from_remote",
+  update_user_device_web_socket_sessions = "update_user_device_web_socket_sessions",
+  received_the_call = "received_the_call",
+  alert = "alert",
+
+  CLIENT_ERROR = "CLIENT_ERROR"
 }
 
-class WebSocketSessionIdOrServer extends String {
-  public static SERVER = "server"
+export interface CommandSocketMessage {
+  data?: string,
+  destinationDeviceId?: 'server' | string | null,
+  initiator?: string | null,
+  commandType?: CommandWebSocketMessageType
 }

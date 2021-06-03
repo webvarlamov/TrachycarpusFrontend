@@ -1,10 +1,11 @@
 <main class="fd-page">
   <aside>
     <app-device-list-header></app-device-list-header>
-    <app-device-list></app-device-list>
+    <app-device-list (onDeviceSelect$)="onDeviceSelectFn($event)"></app-device-list>
     <app-device-list-footer></app-device-list-footer>
   </aside>
-  <section>
-    <app-device-details></app-device-details>
+  <section [ngClass]="{'show-details-mobile': showDetails_mobile, 'hide-details-mobile': !showDetails_mobile}">
+    <app-device-details (onBack$)="onBackFn()"></app-device-details>
   </section>
+  <app-web-rtc-call [ngClass]="{'show': showVideoCall$ | async}"></app-web-rtc-call>
 </main>

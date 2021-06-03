@@ -1,0 +1,55 @@
+:host {
+  height: 100%;
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+
+}
+
+:host(.show) {
+  display: block;
+  z-index: 3;
+}
+
+#remote-video {}
+
+#local-video {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  right: 10px;
+  top: 10px;
+  border: 1px solid #8080803b;
+}
+
+.abort-button {
+  height: 60px;
+  width: 60px;
+  background-color: red;
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.abort-button i {
+  color: white !important;
+  font-size: 1rem;
+  transform: rotate(135deg);
+}
+
+.main-controls-wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+

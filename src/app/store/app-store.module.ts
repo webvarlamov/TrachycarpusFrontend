@@ -6,6 +6,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
 import { deviceListReducer } from "./device-list/reducer/device-list.reducer";
 import { DeviceListEffect } from "./device-list/effect/device-list-effect.service";
+import {appReducer} from "./app/reducer/app.reducer";
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { DeviceListEffect } from "./device-list/effect/device-list-effect.servic
     CommonModule,
     NgrxStoreModule.forRoot({
       deviceListState: deviceListReducer,
+      appState: appReducer
     }, {
       runtimeChecks: {
         strictStateImmutability: true,

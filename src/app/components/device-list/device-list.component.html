@@ -2,15 +2,16 @@
   <ng-container *ngFor="let device  of deviceListData$ | async; trackBy: trackByUuid">
     <li class="fd-list__item {{ device.selected ? 'is-selected': ''}}"
         (click)="selectDevice(device)">
-      <span class="fd-image--s fd-list__thumbnail">
-        <span class="sap-icon sap-icon--employee-pane" style="font-size:2rem"></span>
-      </span>
+          <span class="fd-image--s fd-list__thumbnail">
+            <span class="sap-icon sap-icon--employee-pane" style="font-size:2rem"></span>
+          </span>
       <div class="fd-list__content">
-        <div class="fd-list__title">{{device?.os?.name}} {{device?.os?.version}}</div>
+        <div class="fd-list__title">{{device?.os?.name}} {{device?.os?.version}} <a class="fd-link fd-list__link--more" (click)="helloDevice(device)">Send "Hello alert"</a></div>
         <div class="fd-list__byline fd-list__byline--2-col">
           <div class="fd-list__byline-left">{{device?.browser?.name}} {{device?.browser?.major}}</div>
           <div class="fd-list__byline-right">
-            <span class="sap-icon sap-icon--cart {{!device.online ? 'sap-icon--circle-task': 'sap-icon--circle-task-2'}}"
+                <span
+                  class="sap-icon sap-icon--cart {{!device.online ? 'sap-icon--circle-task': 'sap-icon--circle-task-2'}}"
                   style="color: var(--sapAccentColor8);"></span>
           </div>
         </div>

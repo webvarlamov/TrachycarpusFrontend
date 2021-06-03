@@ -1,1 +1,7 @@
-{{selectedUserDevice$ | async | json}}
+<main class="fd-page">
+  <app-device-details-header
+    [selectedDevice]="selectedUserDevice$ | async"
+    (onBackButtonClick$)="onBack$.emit()"></app-device-details-header>
+  <app-device-details-content></app-device-details-content>
+  <app-device-details-footer></app-device-details-footer>
+</main>
