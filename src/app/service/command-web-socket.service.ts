@@ -19,6 +19,7 @@ import {UserDevice, UserDeviceModel} from "../store/device-list/model/UserDevice
 export class CommandWebSocketService extends HasSubscriptions {
   public onUpdateUserDeviceWebSocketSessionsMessage$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
     .pipe(
+      tap(console.log),
       delay(1000),
       map(event => this.parseMessageEventData(event)),
       filter(message => message.commandType === CommandWebSocketMessageType.update_user_device_web_socket_sessions)
@@ -36,6 +37,13 @@ export class CommandWebSocketService extends HasSubscriptions {
       delay(1000),
       map(event => this.parseMessageEventData(event)),
       filter(message => message.commandType === CommandWebSocketMessageType.received_the_call)
+    );
+
+  public onReceivedTheAnswer$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
+    .pipe(
+      delay(1000),
+      map(event => this.parseMessageEventData(event)),
+      filter(message => message.commandType === CommandWebSocketMessageType.received_the_answer)
     );
 
   constructor(
@@ -92,6 +100,15 @@ export class CommandWebSocketService extends HasSubscriptions {
     this.commandWebSocket.sendCommand({
       commandType: CommandWebSocketMessageType.received_the_call,
       destinationDeviceId: userDevice.uuid,
+      data: JSON.stringify(localDescription),
+      initiator: localStorage.getItem("user-device-id")
+    })
+  }
+
+  public sendReceivedTheAnswerCommand(userDeviceId: string, localDescription: RTCSessionDescriptionInit) {
+    this.commandWebSocket.sendCommand({
+      commandType: CommandWebSocketMessageType.received_the_answer,
+      destinationDeviceId: userDeviceId,
       data: JSON.stringify(localDescription),
       initiator: localStorage.getItem("user-device-id")
     })

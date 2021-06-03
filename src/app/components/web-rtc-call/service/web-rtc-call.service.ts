@@ -1,13 +1,12 @@
-import {ElementRef, Injectable, TemplateRef} from '@angular/core';
-import {CommandWebSocketService} from "../../../../../service/command-web-socket.service";
+import {ElementRef, Injectable} from '@angular/core';
+import {CommandWebSocketService} from "../../../service/command-web-socket.service";
 import {Store} from "@ngrx/store";
-import {selectSelectedDevice} from "../../../../../store/device-list/reducer/device-list.reducer";
-import {filter, map, switchMap, take, tap} from "rxjs/operators";
-import {AppStore} from "../../../../../store/app-store";
-import {HasSubscriptions} from "../../../../../model/common/has-subscriptions";
-import {Observable, of, Subscription} from "rxjs";
-import {toggleShowVideoCallComponent} from "../../../../../store/app/reducer/app.reducer";
-import {fromPromise} from "rxjs/internal-compatibility";
+import {selectSelectedDevice} from "../../../store/device-list/reducer/device-list.reducer";
+import {combineAll, map, switchMap, take, tap} from "rxjs/operators";
+import {AppStore} from "../../../store/app-store";
+import {HasSubscriptions} from "../../../model/common/has-subscriptions";
+import {combineLatest, Observable, of, Subscription} from "rxjs";
+import {toggleShowVideoCallComponent} from "../../../store/app/reducer/app.reducer";
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +31,10 @@ export class WebRtcCallService extends HasSubscriptions {
     this.subscriptions.push(
       this.initReceivedTheCallSubscription()
     )
+
+    this.subscriptions.push(
+      this.initReceivedTheAnswerSubscription()
+    )
   }
 
   public addVideoElementsRefs(remoteVideo: ElementRef<HTMLVideoElement> | null, localVideo: ElementRef<HTMLVideoElement> | null) {
@@ -39,7 +42,7 @@ export class WebRtcCallService extends HasSubscriptions {
     this.localVideo = localVideo;
   }
 
-  public setOfferFromRemote(data: RTCSessionDescriptionInit): Promise<RTCSessionDescriptionInit> {
+  public setOfferFromRemoteAndCreateAnswer(data: RTCSessionDescriptionInit): Promise<RTCSessionDescriptionInit> {
     return this.rtcPeerConnection.setRemoteDescription(data).then(() => {
       return this.rtcPeerConnection?.createAnswer().then(answer => {
         return this.rtcPeerConnection?.setLocalDescription(answer).then(() => {
@@ -50,17 +53,14 @@ export class WebRtcCallService extends HasSubscriptions {
   }
 
   public setAnswerFromRemote(data: RTCSessionDescriptionInit): Promise<void> {
-    return this.rtcPeerConnection ?
-      this.rtcPeerConnection.setRemoteDescription(data) :
-      new Promise(() => {
-      })
+    return this.rtcPeerConnection.setRemoteDescription(data);
   }
 
-  public setCandidateFromRemote(data: RTCIceCandidate | RTCIceCandidateInit): Promise<void> | undefined {
+  public setCandidateFromRemote(data: RTCIceCandidate | RTCIceCandidateInit): Promise<void> {
     return this.rtcPeerConnection?.addIceCandidate(data);
   }
 
-  public createOffer(): Promise<RTCSessionDescriptionInit | undefined> | undefined {
+  public createOffer(): Promise<RTCSessionDescriptionInit> {
     return this.rtcPeerConnection?.createOffer().then(description => {
       return this.rtcPeerConnection?.setLocalDescription(description).then(() => {
         return description;
@@ -69,14 +69,23 @@ export class WebRtcCallService extends HasSubscriptions {
   }
 
   private initRtcPeerConnection(): RTCPeerConnection {
-    let connection = new RTCPeerConnection(this.connectionConfig);
-    return connection;
+    let newConnection = new RTCPeerConnection(this.connectionConfig);
+    newConnection.onicecandidate = (event) => {
+      debugger
+      // logManager.logPrint("onIceCandidate")
+      // let candidate = event.candidate;
+      // socketConnectionManager.commandSocket.send(JSON.stringify({
+      //   type: "candidate-from-remote",
+      //   data: candidate
+      // }))
+    }
+    return newConnection;
   }
 
-  public navigatorInit(): Promise<void> {
+  public navigatorInit(): any {
     return navigator.mediaDevices.getUserMedia(this.offerConstraints)
       .then(stream => this.onNavigatorReturnedStream(stream))
-      .catch(err => console.error(err));
+      .catch(err => new Observable());
   }
 
   public onNavigatorReturnedStream(stream: MediaStream): void {
@@ -98,6 +107,7 @@ export class WebRtcCallService extends HasSubscriptions {
       ).toPromise().then(userDevice => {
       this.navigatorInit().then(() => {
         this.createOffer()?.then(localDescription => {
+          debugger
           if (localDescription != null && userDevice != null) {
             this.commandWebSocketService.sendReceivedTheCallCommand(userDevice, localDescription)
           }
@@ -116,11 +126,33 @@ export class WebRtcCallService extends HasSubscriptions {
   private initReceivedTheCallSubscription(): Subscription {
     return this.commandWebSocketService.onReceivedTheCall$
       .pipe(
-        map(message => message?.data),
-        map(data => JSON.parse(data ? data : "") as RTCSessionDescriptionInit),
-        switchMap(remoteDescription => this.setOfferFromRemote(remoteDescription)),
-        // switchMap(() => )
+        map(message => {
+          const remoteDescription = JSON.parse(message.data) as RTCSessionDescriptionInit;
+          return {...message, data: remoteDescription}
+        }),
+        switchMap(message => {
+          return combineLatest([
+            this.setOfferFromRemoteAndCreateAnswer(message.data),
+            of(message)
+          ])
+        }),
+        tap(([answer, message]) => {
+          this.commandWebSocketService.sendReceivedTheAnswerCommand(message.initiator, answer)
+        })
       ).subscribe()
+  }
+
+  private initReceivedTheAnswerSubscription(): Subscription {
+    return this.commandWebSocketService.onReceivedTheAnswer$
+      .pipe(
+        map(message => {
+          const remoteDescription = JSON.parse(message.data) as RTCSessionDescriptionInit;
+          return {...message, data: remoteDescription}
+        }),
+        switchMap(message => {
+          return this.setAnswerFromRemote(message.data)
+        })
+      ).subscribe();
   }
 }
 

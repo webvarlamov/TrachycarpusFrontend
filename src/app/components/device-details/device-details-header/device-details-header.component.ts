@@ -3,7 +3,7 @@ import {EventEmitter} from "@angular/core";
 import {UserDevice} from "../../../store/device-list/model/UserDevice";
 import {Store} from "@ngrx/store";
 import {toggleShowVideoCallComponent} from "../../../store/app/reducer/app.reducer";
-import {WebRtcCallService} from "../device-details-content/web-rtc-call/service/web-rtc-call.service";
+import {WebRtcCallService} from "../../web-rtc-call/service/web-rtc-call.service";
 
 @Component({
   selector: 'app-device-details-header',

@@ -18,21 +18,17 @@ export class WebSocketObservable {
   public readonly onopen$: Subject<any> = new Subject<any>();
 
   readonly onclose = (event: CloseEvent) => {
-    console.log("On WebSocket close", event)
     this.onclose$.next(event)
   };
 
   readonly onerror = (event: Event) => {
-    console.log("On WebSocket error", event)
     this.onerror$.next(event)
   };
 
   readonly onmessage = (event: MessageEvent) => {
-    console.log("On WebSocket message", event)
     this.onmessageSubject.next(event)
   };
   readonly onopen = (event: Event) => {
-    console.log("On WebSocket open", event)
     this.onopen$.next(event)
   };
 

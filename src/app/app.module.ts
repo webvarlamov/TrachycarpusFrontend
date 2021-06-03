@@ -14,7 +14,7 @@ import { DeviceIdSaverInterceptor } from "./http/interceptor/device-id-saver.int
 import { DeviceDetailsHeaderComponent } from './components/device-details/device-details-header/device-details-header.component';
 import { DeviceDetailsFooterComponent } from './components/device-details/device-details-footer/device-details-footer.component';
 import { DeviceDetailsContentComponent } from './components/device-details/device-details-content/device-details-content.component';
-import { WebRtcCallComponent } from './components/device-details/device-details-content/web-rtc-call/web-rtc-call.component';
+import { WebRtcCallComponent } from './components/web-rtc-call/web-rtc-call.component';
 
 @NgModule({
   declarations: [
