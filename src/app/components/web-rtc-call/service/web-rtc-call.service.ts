@@ -2,7 +2,7 @@ import {ElementRef, Injectable} from '@angular/core';
 import {CommandWebSocketService} from "../../../service/command-web-socket.service";
 import {Store} from "@ngrx/store";
 import {selectSelectedDevice} from "../../../store/device-list/reducer/device-list.reducer";
-import {combineAll, map, switchMap, take, tap} from "rxjs/operators";
+import { map, switchMap, take, tap} from "rxjs/operators";
 import {AppStore} from "../../../store/app-store";
 import {HasSubscriptions} from "../../../model/common/has-subscriptions";
 import {combineLatest, Observable, of, Subscription} from "rxjs";
@@ -12,6 +12,8 @@ import {toggleShowVideoCallComponent} from "../../../store/app/reducer/app.reduc
   providedIn: 'root'
 })
 export class WebRtcCallService extends HasSubscriptions {
+  public remotePeerUserDeviceUUID: string;
+
   public remoteVideo: ElementRef<HTMLVideoElement> | null = null;
   public localVideo: ElementRef<HTMLVideoElement> | null = null;
 
@@ -70,30 +72,30 @@ export class WebRtcCallService extends HasSubscriptions {
 
   private initRtcPeerConnection(): RTCPeerConnection {
     let newConnection = new RTCPeerConnection(this.connectionConfig);
-    newConnection.onicecandidate = (event) => {
-      debugger
-      // logManager.logPrint("onIceCandidate")
-      // let candidate = event.candidate;
-      // socketConnectionManager.commandSocket.send(JSON.stringify({
-      //   type: "candidate-from-remote",
-      //   data: candidate
-      // }))
-    }
+    newConnection.onicecandidate = this.onRTCPeerConnectionICECandidate
+    newConnection.ontrack = this.onRTCPeerConnectionTrack
     return newConnection;
+  }
+
+  public onRTCPeerConnectionICECandidate = (event: RTCPeerConnectionIceEvent) => {
+    const candidate = event.candidate;
+    this.commandWebSocketService.sendReceiveCandidateCommand(this.remotePeerUserDeviceUUID, candidate)
+  }
+
+  public onRTCPeerConnectionTrack = (event: RTCTrackEvent) => {
+    this.remoteVideo.nativeElement.srcObject = event.streams[0];
   }
 
   public navigatorInit(): any {
     return navigator.mediaDevices.getUserMedia(this.offerConstraints)
-      .then(stream => this.onNavigatorReturnedStream(stream))
+      .then(stream => this.onNavigatorGetAccess(stream))
       .catch(err => new Observable());
   }
 
-  public onNavigatorReturnedStream(stream: MediaStream): void {
+  public onNavigatorGetAccess(stream: MediaStream): void {
     this.stream = stream;
-    let nativeElement = this.localVideo?.nativeElement;
-    if (nativeElement !== undefined) {
-      nativeElement.srcObject = this.stream;
-    }
+    this.localVideo.nativeElement.srcObject = this.stream;
+    this.remoteVideo.nativeElement.srcObject = this.stream;
 
     this.stream?.getTracks().forEach(track => {
       this.rtcPeerConnection?.addTrack(track, stream)
@@ -105,9 +107,9 @@ export class WebRtcCallService extends HasSubscriptions {
       .pipe(
         take(1)
       ).toPromise().then(userDevice => {
+      this.remotePeerUserDeviceUUID = userDevice.uuid;
       this.navigatorInit().then(() => {
         this.createOffer()?.then(localDescription => {
-          debugger
           if (localDescription != null && userDevice != null) {
             this.commandWebSocketService.sendReceivedTheCallCommand(userDevice, localDescription)
           }
@@ -127,17 +129,27 @@ export class WebRtcCallService extends HasSubscriptions {
     return this.commandWebSocketService.onReceivedTheCall$
       .pipe(
         map(message => {
+          console.info("2 (Receiver). Receive receive the call command message", message)
+
+          this.remotePeerUserDeviceUUID = message.initiator;
           const remoteDescription = JSON.parse(message.data) as RTCSessionDescriptionInit;
           return {...message, data: remoteDescription}
         }),
         switchMap(message => {
+          return combineLatest([
+            this.navigatorInit(),
+            of(message)
+          ])
+        }),
+        switchMap(([_void, message]) => {
           return combineLatest([
             this.setOfferFromRemoteAndCreateAnswer(message.data),
             of(message)
           ])
         }),
         tap(([answer, message]) => {
-          this.commandWebSocketService.sendReceivedTheAnswerCommand(message.initiator, answer)
+          this.commandWebSocketService.sendReceivedTheAnswerCommand(message.initiator, answer);
+          this.store.dispatch(toggleShowVideoCallComponent({show: true}))
         })
       ).subscribe()
   }
@@ -145,6 +157,11 @@ export class WebRtcCallService extends HasSubscriptions {
   private initReceivedTheAnswerSubscription(): Subscription {
     return this.commandWebSocketService.onReceivedTheAnswer$
       .pipe(
+        tap(message => {
+          console.info("4 (Initiator). Receive receive answer command message", message)
+
+          this.remotePeerUserDeviceUUID = message.initiator;
+        }),
         map(message => {
           const remoteDescription = JSON.parse(message.data) as RTCSessionDescriptionInit;
           return {...message, data: remoteDescription}

@@ -97,20 +97,41 @@ export class CommandWebSocketService extends HasSubscriptions {
   }
 
   public sendReceivedTheCallCommand(userDevice: UserDevice, localDescription: RTCSessionDescriptionInit) {
-    this.commandWebSocket.sendCommand({
+    const message = {
       commandType: CommandWebSocketMessageType.received_the_call,
       destinationDeviceId: userDevice.uuid,
       data: JSON.stringify(localDescription),
       initiator: localStorage.getItem("user-device-id")
-    })
+    }
+
+    console.info("1 (Initiator). Send received the call command message", message)
+
+    this.commandWebSocket.sendCommand(message)
   }
 
   public sendReceivedTheAnswerCommand(userDeviceId: string, localDescription: RTCSessionDescriptionInit) {
-    this.commandWebSocket.sendCommand({
+    const message = {
       commandType: CommandWebSocketMessageType.received_the_answer,
       destinationDeviceId: userDeviceId,
       data: JSON.stringify(localDescription),
       initiator: localStorage.getItem("user-device-id")
-    })
+    }
+
+    console.info("3 (Receiver). Send the receive answer comand message", message)
+
+    this.commandWebSocket.sendCommand(message)
+  }
+
+  public sendReceiveCandidateCommand(userDeviceId: string, candidate: RTCIceCandidate) {
+    const message = {
+      commandType: CommandWebSocketMessageType.received_candidate_from_remote,
+      destinationDeviceId: userDeviceId,
+      data: JSON.stringify(candidate),
+      initiator: localStorage.getItem("user-device-id")
+    }
+
+    console.info("5 (All). Send the receive ICE candidate command ", message)
+
+    this.commandWebSocket.sendCommand(message)
   }
 }

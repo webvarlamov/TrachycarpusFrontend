@@ -26,6 +26,7 @@ export enum CommandWebSocketMessageType {
   update_user_device_web_socket_sessions = "update_user_device_web_socket_sessions",
   received_the_call = "received_the_call",
   received_the_answer = "received_the_answer",
+  received_candidate_from_remote = "received_candidate_from_remote",
   alert = "alert",
 
   CLIENT_ERROR = "CLIENT_ERROR"
