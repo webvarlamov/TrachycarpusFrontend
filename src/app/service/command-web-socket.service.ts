@@ -46,6 +46,13 @@ export class CommandWebSocketService extends HasSubscriptions {
       filter(message => message.commandType === CommandWebSocketMessageType.received_the_answer)
     );
 
+  public onReceiveDataChannelOffer$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
+    .pipe(
+      delay(1000),
+      map(event => this.parseMessageEventData(event)),
+      filter(message => message.commandType === CommandWebSocketMessageType.receive_data_channel_offer)
+    );
+
   constructor(
     private store: Store,
     private httpDataAccessService: HttpDataAccessService,
@@ -131,6 +138,17 @@ export class CommandWebSocketService extends HasSubscriptions {
     }
 
     console.info("5 (All). Send the receive ICE candidate command ", message)
+
+    this.commandWebSocket.sendCommand(message)
+  }
+
+  public sendReceiveDataChannelOfferCommand(userDevice: UserDevice, offer: RTCSessionDescriptionInit) {
+    const message = {
+      commandType: CommandWebSocketMessageType.receive_data_channel_offer,
+      destinationDeviceId: userDevice.uuid,
+      data: JSON.stringify(offer),
+      initiator: localStorage.getItem("user-device-id")
+    }
 
     this.commandWebSocket.sendCommand(message)
   }
