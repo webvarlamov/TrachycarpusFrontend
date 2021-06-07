@@ -1,6 +1,6 @@
 import {Observable, Subject, Subscription} from "rxjs";
 import { HttpUtils } from "../http.utils";
-import {shareReplay} from "rxjs/operators";
+import {shareReplay, tap} from "rxjs/operators";
 
 export class WebSocketObservable {
   public webSocket: WebSocket | undefined;

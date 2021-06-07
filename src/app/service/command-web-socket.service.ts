@@ -19,7 +19,6 @@ import {UserDevice, UserDeviceModel} from "../store/device-list/model/UserDevice
 export class CommandWebSocketService extends HasSubscriptions {
   public onUpdateUserDeviceWebSocketSessionsMessage$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
     .pipe(
-      tap(console.log),
       delay(1000),
       map(event => this.parseMessageEventData(event)),
       filter(message => message.commandType === CommandWebSocketMessageType.update_user_device_web_socket_sessions)
@@ -32,18 +31,11 @@ export class CommandWebSocketService extends HasSubscriptions {
       filter(message => message.commandType === CommandWebSocketMessageType.alert)
     );
 
-  public onReceivedTheCall$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
+  public onReceivedTheAnswerFromRemote$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
     .pipe(
       delay(1000),
       map(event => this.parseMessageEventData(event)),
-      filter(message => message.commandType === CommandWebSocketMessageType.received_the_call)
-    );
-
-  public onReceivedTheAnswer$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
-    .pipe(
-      delay(1000),
-      map(event => this.parseMessageEventData(event)),
-      filter(message => message.commandType === CommandWebSocketMessageType.received_the_answer)
+      filter(message => message.commandType === CommandWebSocketMessageType.receive_answer_from_remote)
     );
 
   public onReceiveDataChannelOffer$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
@@ -51,6 +43,21 @@ export class CommandWebSocketService extends HasSubscriptions {
       delay(1000),
       map(event => this.parseMessageEventData(event)),
       filter(message => message.commandType === CommandWebSocketMessageType.receive_data_channel_offer)
+    );
+
+  public onReceiveCandidateFromRemote$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
+    .pipe(
+      delay(1000),
+      map(event => this.parseMessageEventData(event)),
+      filter(message => message.commandType === CommandWebSocketMessageType.received_candidate_from_remote)
+    );
+
+
+  public onReceiveOfferFromRemote$: Observable<CommandSocketMessage> = this.commandWebSocket.onmessage$
+    .pipe(
+      delay(1000),
+      map(event => this.parseMessageEventData(event)),
+      filter(message => message.commandType === CommandWebSocketMessageType.receive_offer_from_remote)
     );
 
   constructor(
@@ -70,7 +77,7 @@ export class CommandWebSocketService extends HasSubscriptions {
       ).subscribe();
   }
 
-  private parseMessageEventData(messageEvent: MessageEvent): CommandSocketMessage {
+  public parseMessageEventData(messageEvent: MessageEvent): CommandSocketMessage {
     try {
       return JSON.parse(messageEvent.data)
     } catch (e) {
@@ -103,28 +110,24 @@ export class CommandWebSocketService extends HasSubscriptions {
     })
   }
 
-  public sendReceivedTheCallCommand(userDevice: UserDevice, localDescription: RTCSessionDescriptionInit) {
+  public sendReceivedOfferFromRemoteCommand(userDeviceId: string, localDescription: RTCSessionDescriptionInit) {
     const message = {
-      commandType: CommandWebSocketMessageType.received_the_call,
-      destinationDeviceId: userDevice.uuid,
-      data: JSON.stringify(localDescription),
-      initiator: localStorage.getItem("user-device-id")
-    }
-
-    console.info("1 (Initiator). Send received the call command message", message)
-
-    this.commandWebSocket.sendCommand(message)
-  }
-
-  public sendReceivedTheAnswerCommand(userDeviceId: string, localDescription: RTCSessionDescriptionInit) {
-    const message = {
-      commandType: CommandWebSocketMessageType.received_the_answer,
+      commandType: CommandWebSocketMessageType.receive_offer_from_remote,
       destinationDeviceId: userDeviceId,
       data: JSON.stringify(localDescription),
       initiator: localStorage.getItem("user-device-id")
     }
 
-    console.info("3 (Receiver). Send the receive answer comand message", message)
+    this.commandWebSocket.sendCommand(message)
+  }
+
+  public sendReceivedTheAnswerFromRemoteCommand(userDeviceId: string, localDescription: RTCSessionDescriptionInit) {
+    const message = {
+      commandType: CommandWebSocketMessageType.receive_answer_from_remote,
+      destinationDeviceId: userDeviceId,
+      data: JSON.stringify(localDescription),
+      initiator: localStorage.getItem("user-device-id")
+    }
 
     this.commandWebSocket.sendCommand(message)
   }
@@ -137,8 +140,6 @@ export class CommandWebSocketService extends HasSubscriptions {
       initiator: localStorage.getItem("user-device-id")
     }
 
-    console.info("5 (All). Send the receive ICE candidate command ", message)
-
     this.commandWebSocket.sendCommand(message)
   }
 
@@ -147,6 +148,17 @@ export class CommandWebSocketService extends HasSubscriptions {
       commandType: CommandWebSocketMessageType.receive_data_channel_offer,
       destinationDeviceId: userDevice.uuid,
       data: JSON.stringify(offer),
+      initiator: localStorage.getItem("user-device-id")
+    }
+
+    this.commandWebSocket.sendCommand(message)
+  }
+
+  public sendDescriptionToRemote(userDeviceId: string, description: RTCSessionDescriptionInit) {
+    const message = {
+      commandType: CommandWebSocketMessageType.received_remote_description,
+      destinationDeviceId: userDeviceId,
+      data: JSON.stringify(description),
       initiator: localStorage.getItem("user-device-id")
     }
 

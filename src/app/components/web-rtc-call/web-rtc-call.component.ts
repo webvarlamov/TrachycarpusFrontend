@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { WebRtcCallService } from "./service/web-rtc-call.service";
+import {WebRtcCall2Service} from "./service/web-rtc-call-2.service";
 
 @Component({
   selector: 'app-web-rtc-call',
@@ -11,17 +11,16 @@ export class WebRtcCallComponent implements OnInit, AfterViewInit {
   @ViewChild('localVideo', {static: true}) localVideo: ElementRef<HTMLVideoElement> | null = null;
 
   constructor(
-    public webRtcCallService: WebRtcCallService
+    public webRtcCallService: WebRtcCall2Service
   ) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    this.webRtcCallService.addVideoElementsRefs(this.remoteVideo, this.localVideo)
   }
 
   rejectCall() {
-    this.webRtcCallService.rejectCall();
+    this.webRtcCallService.hangup();
   }
 }

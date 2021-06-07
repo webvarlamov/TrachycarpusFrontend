@@ -3,7 +3,7 @@ import {EventEmitter} from "@angular/core";
 import {UserDevice} from "../../../store/device-list/model/UserDevice";
 import {Store} from "@ngrx/store";
 import {toggleShowVideoCallComponent} from "../../../store/app/reducer/app.reducer";
-import {WebRtcCallService} from "../../web-rtc-call/service/web-rtc-call.service";
+import {WebRtcCall2Service} from "../../web-rtc-call/service/web-rtc-call-2.service";
 
 @Component({
   selector: 'app-device-details-header',
@@ -16,7 +16,7 @@ export class DeviceDetailsHeaderComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private webRtcCallService: WebRtcCallService
+    private webRtcCallService: WebRtcCall2Service
   ) {}
 
   ngOnInit(): void {
@@ -24,6 +24,6 @@ export class DeviceDetailsHeaderComponent implements OnInit {
 
   public call(selectedDevice: UserDevice | null): void {
     this.store.dispatch(toggleShowVideoCallComponent({show: true}))
-    this.webRtcCallService.call();
+    this.webRtcCallService.call()
   }
 }

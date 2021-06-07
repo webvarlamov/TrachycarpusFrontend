@@ -20,13 +20,10 @@ export class CommandWebSocket extends WebSocketObservable {
 }
 
 export enum CommandWebSocketMessageType {
-  set_offer_from_remote = "set_offer_from_remote",
-  set_answer_from_remote = "set_answer_from_remote",
-  set_candidate_from_remote = "set_candidate_from_remote",
-
-  received_the_call = "received_the_call",
-  received_the_answer = "received_the_answer",
+  receive_offer_from_remote = "receive_offer_from_remote",
+  receive_answer_from_remote = "receive_answer_from_remote",
   received_candidate_from_remote = "received_candidate_from_remote",
+  received_remote_description = "received_remote_description",
 
   receive_data_channel_offer = "receive_data_channel_offer",
   receive_data_channel_answer = "receive_data_channel_answer",

@@ -1,6 +1,7 @@
-/*:host {*/
-/*  min-height: 55px;*/
-/*}*/
+:host {
+  display: block;
+  flex-basis: 150px;
+}
 
 div.fd-action-bar {
   padding-left: 0.5rem;
