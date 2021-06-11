@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4201",
-    "build": "ng build --prod --outputPath=/Users/roman/Documents/dev/Trachycarpus/src/main/resources/static/angular --output-hashing=none",
+    "start": "ng serve --port 4200",
+    "build": "ng build --prod --outputPath=/Users/roman/Documents/dev/Trachycarpus/src/main/resources/static/js/TrachycarpusFrontend --output-hashing=none",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

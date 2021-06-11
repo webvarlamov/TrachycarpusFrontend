@@ -45,6 +45,36 @@ export class WebRtcCall2Service extends HasSubscriptions {
       }
     }
 
+    connection.onicecandidateerror = (event) => {
+      console.info('onicecandidateerror', event)
+    }
+
+    connection.onconnectionstatechange = (event) => {
+      console.info('onconnectionstatechange', event)
+    }
+
+    connection.onnegotiationneeded = (event) => {
+      console.info('onnegotiationneeded', event)
+    }
+
+    connection.ondatachannel = (event) => {
+      console.info('ondatachannel', event)
+    }
+
+    connection.onicegatheringstatechange = (event) => {
+      console.info('onicegatheringstatechange', event)
+    }
+
+    connection.onstatsended = (event) => {
+      console.info('onstatsended', event)
+    }
+
+    connection.onsignalingstatechange = (event) => {
+      console.info('onsignalingstatechange', event)
+    }
+
+
+
     return connection;
   }
 

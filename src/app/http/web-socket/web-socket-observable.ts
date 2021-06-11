@@ -33,11 +33,7 @@ export class WebSocketObservable {
   };
 
   public connect(): void {
-    this.webSocket = new WebSocket((
-        HttpUtils.isHttps() ? "wss://" : "ws://")
-      + HttpUtils.getHostName()
-      + (HttpUtils.isDev() ? ":8081" : "")
-      + "/" + this.path + this.withQueryParams())
+    this.webSocket = new WebSocket(`${this.getProtocol()}//${location.hostname}${this.getPort()}/${this.path}${this.withQueryParams()}`)
 
     this.webSocket.onclose = this.onclose;
     this.webSocket.onerror = this.onerror;
@@ -59,5 +55,21 @@ export class WebSocketObservable {
 
   constructor(path: string) {
     this.path = path;
+  }
+
+  public getProtocol(): string {
+    if (location.protocol === 'https:') {
+      return 'wss:'
+    } else {
+      return 'ws:'
+    }
+  }
+
+  public getPort(): string {
+    if(location.port.length != 0) {
+      return `:8080`
+    } else {
+      return ''
+    }
   }
 }
