@@ -7,5 +7,5 @@
   <section [ngClass]="{'show-details-mobile': showDetails_mobile, 'hide-details-mobile': !showDetails_mobile}">
     <app-device-details (onBack$)="onBackFn()"></app-device-details>
   </section>
-  <app-web-rtc-call [ngClass]="{'show': showVideoCall$ | async}"></app-web-rtc-call>
+  <app-web-rtc-call [ngClass]="{'show': showVideoCall$ | async, 'hide': !(showVideoCall$ | async)}"></app-web-rtc-call>
 </main>

@@ -73,8 +73,6 @@ export class WebRtcCall2Service extends HasSubscriptions {
       console.info('onsignalingstatechange', event)
     }
 
-
-
     return connection;
   }
 

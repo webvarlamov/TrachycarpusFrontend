@@ -1,6 +1,6 @@
 :host {
   display: block;
-  flex-basis: 150px;
+  min-height: fit-content;
 }
 
 div.fd-action-bar {

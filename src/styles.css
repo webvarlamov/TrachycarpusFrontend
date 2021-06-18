@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~fundamental-styles";
+@import "assets/themes/light-dark/css_variables.css";
+@import "assets/themes/quartz-dark/css_variables.css";
+@import "assets/themes/hight-contrast/css_variables.css";
 @import "assets/fonts.css";
 
 * {
@@ -16,4 +19,10 @@ html, body {
 .h-spacer {
   height: 1px;
   display: block;
+}
+
+@media screen and (min-width: 980px) {
+  .hidden-element-on-desktop {
+    display: none !important;
+  }
 }

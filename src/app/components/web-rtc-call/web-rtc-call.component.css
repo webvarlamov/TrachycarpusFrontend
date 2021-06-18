@@ -15,6 +15,11 @@
   z-index: 3;
 }
 
+:host(.hide) {
+  display: block;
+  z-index: -1;
+}
+
 #remote-video {}
 
 #local-video {
