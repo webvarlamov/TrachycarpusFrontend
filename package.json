@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4200",
-    "build": "ng build --prod --outputPath=/Users/roman/Documents/dev/Trachycarpus/src/main/resources/static/js/TrachycarpusFrontend --output-hashing=none",
+    "build": "ng build --prod --outputPath=C:\\Users\\varlamov\\IdeaProjects\\Trachycarpus\\src\\main\\resources\\static\\js\\TrachycarpusFrontend --output-hashing=none",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

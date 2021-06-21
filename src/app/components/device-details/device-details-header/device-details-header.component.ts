@@ -26,4 +26,8 @@ export class DeviceDetailsHeaderComponent implements OnInit {
     this.store.dispatch(toggleShowVideoCallComponent({show: true}))
     this.webRtcCallService.call()
   }
+
+  public lock(selectedDevice: UserDevice) {
+
+  }
 }

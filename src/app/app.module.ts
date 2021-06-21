@@ -15,6 +15,8 @@ import { DeviceDetailsHeaderComponent } from './components/device-details/device
 import { DeviceDetailsFooterComponent } from './components/device-details/device-details-footer/device-details-footer.component';
 import { DeviceDetailsContentComponent } from './components/device-details/device-details-content/device-details-content.component';
 import { WebRtcCallComponent } from './components/web-rtc-call/web-rtc-call.component';
+import { VideoListComponent } from './components/device-details/device-details-content/components/video-list/video-list.component';
+import { SoundListComponent } from './components/device-details/device-details-content/components/sound-list/sound-list.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { WebRtcCallComponent } from './components/web-rtc-call/web-rtc-call.comp
     DeviceDetailsHeaderComponent,
     DeviceDetailsFooterComponent,
     DeviceDetailsContentComponent,
-    WebRtcCallComponent
+    WebRtcCallComponent,
+    VideoListComponent,
+    SoundListComponent
   ],
   imports: [
     BrowserModule,

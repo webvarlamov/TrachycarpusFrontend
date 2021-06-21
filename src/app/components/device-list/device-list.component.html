@@ -1,19 +1,14 @@
 <ul class="fd-list fd-list--compact fd-list--byline fd-list--compact" role="list">
   <ng-container *ngFor="let device  of deviceListData$ | async; trackBy: trackByUuid">
-    <li class="fd-list__item {{ device.selected ? 'is-selected': ''}}"
-        (click)="selectDevice(device)">
-          <span class="fd-image--s fd-list__thumbnail">
-            <span class="sap-icon sap-icon--employee-pane" style="font-size:2rem"></span>
-          </span>
-      <div class="fd-list__content">
-        <div class="fd-list__title">{{device?.os?.name}} {{device?.os?.version}} <a class="fd-link fd-list__link--more" (click)="helloDevice(device)">Send "Hello alert"</a></div>
-        <div class="fd-list__byline fd-list__byline--2-col">
-          <div class="fd-list__byline-left">{{device?.browser?.name}} {{device?.browser?.major}}</div>
-          <div class="fd-list__byline-right">
-                <span
-                  class="sap-icon sap-icon--cart {{!device.online ? 'sap-icon--circle-task': 'sap-icon--circle-task-2'}}"
-                  style="color: var(--sapAccentColor8);"></span>
-          </div>
+    <li class="fd-list__item fd-list__item--interractive {{ device.selected ? 'is-selected': ''}}" (click)="selectDevice(device)">
+      <div class="device-list-item-content">
+        <div class="fd-avatar fd-avatar--s fd-avatar--circle fd-avatar--accent-color-5" aria-label="Avatar">
+          <i class="fd-avatar__icon sap-icon--ipad"></i>
+          <i class="fd-avatar__zoom-icon {{device.online ? 'sap-icon' : ''}}"></i>
+        </div>
+        <div class="fd-list__content">
+          <div class="fd-list__title">{{device?.os?.name}} {{device?.os?.version}}</div>
+          <div class="fd-list__byline">{{device?.browser?.name}} {{device?.browser?.major}}</div>
         </div>
       </div>
     </li>

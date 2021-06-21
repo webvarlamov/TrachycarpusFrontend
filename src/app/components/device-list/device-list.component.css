@@ -2,3 +2,15 @@
   width: 100%;
   display: block;
 }
+
+.fd-avatar__zoom-icon {
+  background-color: var(--sapPositiveColor);
+  border-color: var(--sapPositiveColor);
+}
+
+.device-list-item-content {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 10px;
+  width: 100%;
+}

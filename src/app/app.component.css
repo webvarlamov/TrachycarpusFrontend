@@ -24,7 +24,8 @@ main {
 
   main > section {
     z-index: 2;
-    transition: transform .3s;
+    transition: transform .7s;
+    transition-timing-function: ease-in-out;
   }
 
   .show-details-mobile {
