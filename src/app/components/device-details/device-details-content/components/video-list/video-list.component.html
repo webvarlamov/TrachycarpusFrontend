@@ -1,0 +1,29 @@
+<section class="fd-section">
+  <div class="fd-container">
+    <div class="fd-row">
+      <div class="fd-col {{colSize}}" *ngFor="let videoContentItem of videoList$ | async">
+          <div class="fd-card">
+            <div class="fd-badge">{{videoContentItem.videoContentOwnerType}}</div>
+            <div class="fd-card__content">
+              <div class="videoContentItem_thumbnailMask" [ngStyle]="{'background-image': 'url('+ videoContentItem.thumbnailURL+')'}">
+                <button class="videoContentItem_playButton fd-button--emphasized fd-button" (click)="playButtonClick(videoContentItem)">
+                  <i class="sap-icon--media-play"></i>
+                </button>
+              </div>
+            </div>
+            <div class="fd-card__header">
+              <div class="fd-card__header-text">
+                <div class="fd-card__title-area">
+                  <div class="fd-card__title">{{videoContentItem.title}}</div>
+                  <span class="fd-object-status fd-object-status--critical fd-card__counter">{{videoContentItem.rating}} из 5</span>
+                </div>
+                <div class="fd-card__subtitle-area">
+                  <div class="fd-card__subtitle">{{videoContentItem.subTitle}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>

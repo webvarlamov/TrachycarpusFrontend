@@ -1,0 +1,38 @@
+:host {
+  display: grid;
+  width: 100%;
+  overflow: auto;
+  /*grid-template-columns: 1fr 1fr;*/
+  grid-gap: 5px;
+  padding: 5px;
+}
+
+.videoContentItem_thumbnail {
+  widtH: 100%
+}
+
+app-video-list iframe {
+  width: 100%
+}
+
+.fd-card__title, .fd-card__subtitle {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /* max-height: 49px; */
+}
+
+.videoContentItem_thumbnailMask {
+  display: flex;
+  height: 230px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoContentItem_playButton {
+  position: absolute;
+}
