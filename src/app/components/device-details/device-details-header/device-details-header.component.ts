@@ -4,6 +4,7 @@ import {UserDevice} from "../../../store/device-list/model/UserDevice";
 import {Store} from "@ngrx/store";
 import {toggleShowVideoCallComponent} from "../../../store/app/reducer/app.reducer";
 import {WebRtcCall2Service} from "../../web-rtc-call/service/web-rtc-call-2.service";
+import {CommandWebSocketService} from "../../../service/command-web-socket.service";
 
 @Component({
   selector: 'app-device-details-header',
@@ -16,7 +17,8 @@ export class DeviceDetailsHeaderComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private webRtcCallService: WebRtcCall2Service
+    private webRtcCallService: WebRtcCall2Service,
+    private commandSocketService: CommandWebSocketService,
   ) {}
 
   ngOnInit(): void {
@@ -27,7 +29,8 @@ export class DeviceDetailsHeaderComponent implements OnInit {
     this.webRtcCallService.call()
   }
 
-  public lock(selectedDevice: UserDevice) {
-
+  public lock($event: Event, selectedDevice: UserDevice) {
+    const lockState = ($event.target as HTMLInputElement).checked;
+    this.commandSocketService.sendToggleSelfLockCommand(selectedDevice.uuid, lockState)
   }
 }

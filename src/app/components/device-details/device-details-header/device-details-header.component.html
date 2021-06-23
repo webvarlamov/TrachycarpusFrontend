@@ -1,8 +1,9 @@
-<header>
+<header *ngIf="selectedDevice != null">
   <div class="fd-bar fd-action-bar fd-bar--header">
     <div class="fd-bar__left">
       <div class="fd-bar__element">
-        <button class="fd-button fd-button--transparent hidden-element-on-desktop" aria-label="Go back" (click)="onBackButtonClick$.emit()">
+        <button class="fd-button fd-button--transparent hidden-element-on-desktop" aria-label="Go back"
+                (click)="onBackButtonClick$.emit()">
           <i class="sap-icon--navigation-left-arrow"></i>
         </button>
       </div>
@@ -15,11 +16,24 @@
         <button class="fd-button fd-button--transparent" (click)="call(selectedDevice)">
           <i class="sap-icon--video" style="font-size: 1rem"></i>
         </button>
-        <button class="fd-button fd-button--transparent" (click)="lock(selectedDevice)">
-          <i class="sap-icon--locked" style="font-size: 1rem"></i>
-        </button>
+      </div>
 
+      <div class="fd-form-item">
+        <label class="fd-switch fd-switch--semantic fd-switch--compact">
+          <span class="fd-switch__control">
+            <input class="fd-switch__input" type="checkbox" [checked]="selectedDevice.selfLocked" (change)="lock($event, selectedDevice)">
+            <div class="fd-switch__slider">
+              <div class="fd-switch__track">
+                <i class="fd-switch__icon fd-switch__icon--on sap-icon--locked"></i>
+                <span class="fd-switch__handle"></span>
+                <i class="fd-switch__icon fd-switch__icon--off"></i>
+              </div>
+            </div>
+          </span>
+        </label>
       </div>
     </div>
   </div>
 </header>
+
+

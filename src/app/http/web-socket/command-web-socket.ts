@@ -29,10 +29,12 @@ export enum CommandWebSocketMessageType {
   receive_data_channel_answer = "receive_data_channel_answer",
   receive_data_channel_candidate = "receive_data_channel_candidate",
 
+  toggle_self_lock = "toggle_self_lock",
+
   update_user_device_web_socket_sessions = "update_user_device_web_socket_sessions",
   alert = "alert",
 
-  CLIENT_ERROR = "CLIENT_ERROR"
+  CLIENT_ERROR = "CLIENT_ERROR",
 }
 
 export interface CommandSocketMessage {

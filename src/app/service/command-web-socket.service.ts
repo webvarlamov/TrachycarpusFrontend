@@ -154,14 +154,16 @@ export class CommandWebSocketService extends HasSubscriptions {
     this.commandWebSocket.sendCommand(message)
   }
 
-  public sendDescriptionToRemote(userDeviceId: string, description: RTCSessionDescriptionInit) {
+  public sendToggleSelfLockCommand(uuid: string, lockState: boolean): void {
     const message = {
-      commandType: CommandWebSocketMessageType.received_remote_description,
-      destinationDeviceId: userDeviceId,
-      data: JSON.stringify(description),
+      commandType: CommandWebSocketMessageType.toggle_self_lock,
+      destinationDeviceId: 'server',
+      data: JSON.stringify({
+        uuid,
+        lockState
+      }),
       initiator: localStorage.getItem("user-device-id")
     }
-
     this.commandWebSocket.sendCommand(message)
   }
 }
